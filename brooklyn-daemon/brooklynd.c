@@ -1,34 +1,30 @@
-
+#include <signal.h>
 #include <stdio.h>
 #include <stdlib.h>
-
-#include <unistd.h>
-#include <signal.h>
+#include <syslog.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <sys/wait.h>
-#include <syslog.h>
+#include <unistd.h>
 
 static void skeleton_daemon()
 {
-    pid_t pid;
-
     // Fork off the parent process
-    pid = fork();
+    pid_t pid = fork();
     if (pid < 0) {
         syslog(LOG_NOTICE, "Can't fork off the parent process, exiting...");
         exit(EXIT_FAILURE);
-    }   
+    }
     // If we got a good PID, then we can exit the parent process
     if (pid > 0) {
         exit(EXIT_SUCCESS);
-    }   
+    }
 
     // On success: The child process becomes session leader
     if (setsid() < 0) {
         syslog(LOG_NOTICE, "Can't set Unique Session ID for the child process, exiting...");
         exit(EXIT_FAILURE);
-    }   
+    }
 
     // Catch, ignore and handle signals
     signal(SIGCHLD, SIG_IGN);
@@ -39,11 +35,11 @@ static void skeleton_daemon()
     if (pid < 0) {
         syslog(LOG_NOTICE, "Can't fork off the parent process, exiting...");
         exit(EXIT_FAILURE);
-    }   
+    }
     // If we got a good PID, then we can exit the parent process
     if (pid > 0) {
         exit(EXIT_SUCCESS);
-    }   
+    }
 
     // Set new file permissions
     umask(0);
@@ -55,8 +51,7 @@ static void skeleton_daemon()
     }
 
     // Close all open file descriptors
-    int i;
-    for (i = sysconf(_SC_OPEN_MAX); i>0; --i) {
+    for (int i = sysconf(_SC_OPEN_MAX); i>0; --i) {
         close (i);
     }
 }

@@ -1,3 +1,4 @@
+
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -8,67 +9,80 @@
 #include <sys/wait.h>
 #include <syslog.h>
 
-extern char **environ;
-
 static void skeleton_daemon()
 {
     pid_t pid;
 
-    /* Fork off the parent process */
+    // Fork off the parent process
     pid = fork();
-
-    /* An error occurred */
-    if (pid < 0)
+    if (pid < 0) {
+        syslog(LOG_NOTICE, "Can't fork off the parent process, exiting...");
         exit(EXIT_FAILURE);
-
-    /* Success: Let the parent terminate */
-    if (pid > 0)
+    }   
+    // If we got a good PID, then we can exit the parent process
+    if (pid > 0) {
         exit(EXIT_SUCCESS);
+    }   
 
-    /* On success: The child process becomes session leader */
-    if (setsid() < 0)
+    // On success: The child process becomes session leader
+    if (setsid() < 0) {
+        syslog(LOG_NOTICE, "Can't set Unique Session ID for the child process, exiting...");
         exit(EXIT_FAILURE);
+    }   
 
-    /* Catch, ignore and handle signals */
-    //TODO: Implement a working signal handler */
+    // Catch, ignore and handle signals
     signal(SIGCHLD, SIG_IGN);
     signal(SIGHUP, SIG_IGN);
 
-    /* Fork off for the second time*/
+    // Fork off for the second time
     pid = fork();
-
-    /* An error occurred */
-    if (pid < 0)
+    if (pid < 0) {
+        syslog(LOG_NOTICE, "Can't fork off the parent process, exiting...");
         exit(EXIT_FAILURE);
-
-    /* Success: Let the parent terminate */
-    if (pid > 0)
+    }   
+    // If we got a good PID, then we can exit the parent process
+    if (pid > 0) {
         exit(EXIT_SUCCESS);
+    }   
 
-    /* Set new file permissions */
+    // Set new file permissions
     umask(0);
 
-    /* Change the working directory to the root directory */
-    chdir("/");
-
-    /* Close all open file descriptors */
-    int i;
-    for (i = sysconf(_SC_OPEN_MAX); i>0; --i)
-    {
-        close (i);
+    // Change the working directory
+    if (chdir("/") < 0) {
+        syslog(LOG_NOTICE, "Can't change the working directory, exiting...");
+        exit(EXIT_FAILURE);
     }
 
-    /* Log the success to syslog */
-    syslog(LOG_NOTICE, "Brooklyn started");
+    // Close all open file descriptors
+    int i;
+    for (i = sysconf(_SC_OPEN_MAX); i>0; --i) {
+        close (i);
+    }
 }
 
 void run_brooklyn()
 {
-    char *classpath = getenv("BROOKLYN_CLASSPATH");
-    char *java_opts = getenv("BROOKLYN_JAVA_OPTS");
     char *brooklyn_class = "org.apache.brooklyn.cli.Main";
     char *cmd = "launch";
-    execl("/usr/bin/java", "java", "-cp", classpath, java_opts, brooklyn_class, cmd, NULL);
+
+    char *pidfile_name = "/var/run/brooklyn.pid";
+    FILE *pidfile = fopen(pidfile_name, "w");
+    if (! pidfile) {
+        syslog(LOG_NOTICE, "Can't open %s for writing, exiting...", pidfile_name);
+        exit(EXIT_FAILURE);
+    }
+    fprintf(pidfile, "%d", getpid());
+    fclose(pidfile);
+    syslog(LOG_NOTICE, "Brooklyn started, pid: %d", getpid());
+
+    char *java_exec = "/usr/bin/java";
+    if (access(java_exec, R_OK) != -1) {
+        execl("/usr/bin/java", "java", brooklyn_class, cmd, NULL);
+    } else {
+        syslog(LOG_NOTICE, "Can't find Java executable in %s, exiting...", java_exec);
+        exit(EXIT_FAILURE);
+    }
 }
 
 
@@ -82,5 +96,5 @@ int main(int argc, char *argv[])
         sleep (20);
     }
 
-    return EXIT_SUCCESS;
+    exit(EXIT_SUCCESS);
 }

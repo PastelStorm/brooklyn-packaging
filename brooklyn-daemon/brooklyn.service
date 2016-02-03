@@ -5,7 +5,7 @@ Documentation=https://brooklyn.apache.org/documentation/index.html
 [Service]
 ExecStart=/opt/brooklyn/bin/brooklyn launch
 type=forking
-PIDFILE=/var/run/brooklyn.pid
+PIDFILE=/opt/brooklyn/brooklyn.pid
 Restart=always
 User=brooklyn
 Group=brooklyn

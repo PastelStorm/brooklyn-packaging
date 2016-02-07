@@ -3,9 +3,10 @@ Description=Apache Brooklyn Service
 Documentation=https://brooklyn.apache.org/documentation/index.html
 
 [Service]
-ExecStart=/opt/brooklyn/bin/brooklyn launch
+WorkingDirectory=/opt/brooklyn/bin/
+ExecStart=/opt/brooklyn/bin/brooklyn launch --localBrooklynProperties /etc/brooklyn/brooklyn.conf
 type=forking
-PIDFILE=/opt/brooklyn/brooklyn.pid
+PIDFILE=/var/run/brooklyn/brooklyn.pid
 Restart=always
 User=brooklyn
 Group=brooklyn

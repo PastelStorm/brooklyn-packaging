@@ -10,7 +10,10 @@ Source0:        apache-brooklyn-0.8.0.tar.gz
 Requires:       java
 
 %description
-Brooklyn is a framework for modeling, monitoring, and managing applications through autonomic blueprints.
+Apache Brooklyn is a framework for modeling, monitoring, and managing applications through autonomic blueprints.
+
+%prep
+%setup -q
 
 %pre
 /bin/getent group brooklyn || /sbin/groupadd -r brooklyn
@@ -19,7 +22,9 @@ Brooklyn is a framework for modeling, monitoring, and managing applications thro
 %post
 /bin/systemctl daemon-reload
 /bin/systemctl start brooklyn
-/bin/chown -R brooklyn:brooklyn /opt/brooklyn
+/bin/chown -R brooklyn:brooklyn /opt/brooklyn/
+/bin/chown -R brooklyn:brooklyn /var/run/brooklyn/
+/bin/chown -R brooklyn:brooklyn /etc/brooklyn/
 
 %preun
 /bin/systemctl stop brooklyn
@@ -28,8 +33,10 @@ Brooklyn is a framework for modeling, monitoring, and managing applications thro
 /sbin/userdel brooklyn
 
 %files
-/opt/brooklyn
+/etc/brooklyn/brooklyn.conf
 /etc/systemd/system/brooklyn.service
+/opt/brooklyn/
+/var/run/brooklyn/
 
 %changelog
 * Tue Feb  2 2016 Aleksandr Vasilev <aleksandr.vasilev@cloudsoftcorp.com> 0.8.0-1

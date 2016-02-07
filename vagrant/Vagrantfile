@@ -1,0 +1,23 @@
+#!/usr/bin/ruby
+
+# Specify minimum Vagrant version and Vagrant API version
+Vagrant.require_version ">= 1.6.0"
+VAGRANTFILE_API_VERSION = "2"
+
+# Specify the folder containing Brooklyn RPM distribution
+SYNCED_FOLDER = "/home/ec2-user/rpmbuild/RPMS/x86_64"
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+  config.vm.box = "centos/7"
+  config.vm.provider "virtualbox" do |v|
+    v.cpus = 4
+    v.memory = 2048
+  end
+
+  config.vm.define :server do |srv|
+    srv.vm.hostname = "brooklyn-server"
+    srv.vm.synced_folder "/opt/RPMS/", SYNCED_FOLDER, create: true
+    srv.vm.network "forwarded_port", guest: 8081, host: 8081
+    srv.vm.provision "shell", path: "brooklyn-provision"
+  end
+end

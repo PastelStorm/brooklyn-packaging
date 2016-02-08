@@ -1,0 +1,42 @@
+#!/bin/bash
+
+set -x
+
+NAME="apache-brooklyn"
+BROOKLYN_VERSION="0.8.0"
+RPM_VERSION="1"
+ARCH="x86_64"
+RPM_PATH="/opt/RPMS/${NAME}-${BROOKLYN_VERSION}-${RPM_VERSION}.${ARCH}.rpm"
+PID_FILE="/var/run/brooklyn/brooklyn.pid"
+
+echo "Provisioning virtual machine..."
+
+echo "Updating yum repos"
+yum -y update
+
+echo "Installing Java"
+yum -y install java
+
+######
+# Change dir to ${HOME}
+# Create the RPM directory structure
+# Download all the necessary files in the correct directories
+# Build the RPM
+# Change dir to RPMS/x86_64/
+######
+
+echo "Installing Apache Brooklyn from RPM"
+if [ ! -f ${RPM_PATH} ]; then
+    echo "File ${RPM_PATH} not found!"
+    exit 1
+fi
+
+rpm -Uvh ${RPM_PATH}
+
+if [ -f ${PID_FILE} && kill -0 $(cat ${PID_FILE})]; then
+    echo "Brooklyn is running, pid $(cat /var/run/brooklyn/brooklyn.pid)"
+    exit 0
+else
+    echo "Brooklyn is not running!"
+    exit 1
+fi

@@ -14,6 +14,11 @@ PACKAGE_VERSION="1"
 # Clean ${TOP_DIR}
 /usr/bin/rm -rf ${TOP_DIR}
 
+# Uninstall apache-brooklyn if installed
+if /usr/bin/rpm -qa | grep apache-brooklyn; then
+    /usr/bin/rpm -e apache-brooklyn
+fi
+
 # Create rpmbuild directory structure
 /usr/bin/mkdir -p\
     ${TOP_DIR}/rpmbuild/BUILD\
@@ -40,7 +45,7 @@ PACKAGE_VERSION="1"
 /usr/bin/cp ${SCRIPT_DIR}/daemon/systemd/brooklyn.service ${TOP_DIR}/rpmbuild/BUILDROOT/${NAME}-${BROOKLYN_VERSION}-${PACKAGE_VERSION}.x86_64/etc/systemd/system/
 
 # Change brooklyn.conf permissions
-/usr/bin/chmod 600 ${TOP_DIR}/rpmbuild/BUILDROOT/${NAME}-${BROOKLYN_VERSION}-${PACKAGE_VERSION}.x86_64/etc/brooklyn/broklyn.conf
+/usr/bin/chmod 600 ${TOP_DIR}/rpmbuild/BUILDROOT/${NAME}-${BROOKLYN_VERSION}-${PACKAGE_VERSION}.x86_64/etc/brooklyn/brooklyn.conf
 
 # Run the build
 /usr/bin/rpmbuild -ba ${TOP_DIR}/rpmbuild/SPECS/brooklyn.spec

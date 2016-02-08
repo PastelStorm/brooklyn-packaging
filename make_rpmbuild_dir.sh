@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# This script will create a new build area
+# This script will create a new Brooklyn build area
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 TOP_DIR="/tmp/brooklyn-buildroot"
@@ -29,5 +29,6 @@ TOP_DIR="/tmp/brooklyn-buildroot"
 /usr/bin/cp ${SCRIPT_DIR}/brooklyn/brooklyn.conf ${TOP_DIR}/rpmbuild/BUILDROOT/etc/brooklyn/
 /usr/bin/cp ${SCRIPT_DIR}/daemon/systemd/brooklyn.service ${TOP_DIR}/rpmbuild/BUILDROOT/etc/systemd/system/
 
-
-# TODO Copy tar.gz into ${TOP_DIR}/SOURCES directory
+# Copy tar.gz into ${TOP_DIR}/SOURCES directory
+/usr/bin/cp ${SCRIPT_DIR}/tarball/*.tar.gz ${TOP_DIR}/rpmbuild/SOURCES/
+/usr/bin/tar xf ${SCRIPT_DIR}/tarball/*.tar.gz -C ${TOP_DIR}/rpmbuild/BUILDROOT/opt/brooklyn/

@@ -5,6 +5,8 @@ Documentation=https://brooklyn.apache.org/documentation/index.html
 [Service]
 Type=simple
 WorkingDirectory=/opt/brooklyn/bin/
+ExecStartPre=/usr/bin/mkdir /var/run/brooklyn
+ExecStartPre=/usr/bin/chown -R brooklyn:brooklyn /var/run/brooklyn/
 ExecStart=/opt/brooklyn/bin/brooklyn launch --localBrooklynProperties /etc/brooklyn/brooklyn.conf
 Restart=always
 User=brooklyn

@@ -16,9 +16,6 @@ Requires:       java
 %description
 Apache Brooklyn is a framework for modeling, monitoring, and managing applications through autonomic blueprints.
 
-%clean
-/usr/bin/rm -rf /tmp/brooklyn-buildroot
-
 # Set up a group and a user to run Brooklyn
 %pre
 /bin/getent group brooklyn || /sbin/groupadd -r brooklyn

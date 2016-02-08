@@ -11,6 +11,9 @@ PACKAGE_VERSION="1"
 # Change ~/.rpmmacros topdir value
 /usr/bin/echo "%_topdir %(echo ${TOP_DIR})/rpmbuild" > ${HOME}/.rpmmacros
 
+# Clean ${TOP_DIR}
+/usr/bin/rm -rf ${TOP_DIR}
+
 # Create rpmbuild directory structure
 /usr/bin/mkdir -p\
     ${TOP_DIR}/rpmbuild/BUILD\

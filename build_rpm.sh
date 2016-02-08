@@ -17,6 +17,7 @@ PACKAGE_VERSION="1"
 # Uninstall apache-brooklyn if installed
 if /usr/bin/rpm -qa | grep apache-brooklyn; then
     /usr/bin/echo "Please remove the apache-brooklyn package first with \"sudo rpm -Uvh apache-brooklyn\""
+    exit 1
 fi
 
 # Create rpmbuild directory structure

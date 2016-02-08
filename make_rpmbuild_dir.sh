@@ -39,5 +39,8 @@ PACKAGE_VERSION="1"
 /usr/bin/cp ${SCRIPT_DIR}/conf/brooklyn.conf ${TOP_DIR}/rpmbuild/BUILDROOT/${NAME}-${BROOKLYN_VERSION}-${PACKAGE_VERSION}.x86_64/etc/brooklyn/
 /usr/bin/cp ${SCRIPT_DIR}/daemon/systemd/brooklyn.service ${TOP_DIR}/rpmbuild/BUILDROOT/${NAME}-${BROOKLYN_VERSION}-${PACKAGE_VERSION}.x86_64/etc/systemd/system/
 
+# Change brooklyn.conf permissions
+/usr/bin/chmod 600 ${TOP_DIR}/rpmbuild/BUILDROOT/${NAME}-${BROOKLYN_VERSION}-${PACKAGE_VERSION}.x86_64/etc/brooklyn/broklyn.conf
+
 # Run the build
 /usr/bin/rpmbuild -ba ${TOP_DIR}/rpmbuild/SPECS/brooklyn.spec

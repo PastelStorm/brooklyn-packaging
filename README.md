@@ -1,7 +1,7 @@
 # Building the RPM on Centos 7
 
-* Run ```rpm/make_rpmbuild_dir.sh```
-* Download Apache Brooklyn tar.gz file into ```/tmp/brookyn/SOURCE/``` directory
+* Download Apache Brooklyn tar.gz file into ```brooklyn-packaging/tarball/``` directory
+* Run ```brooklyn-packaging/rpm/make_rpmbuild_dir.sh```
 * ```cd /tmp/brooklyn/SPECS```
 * Build the RPM: ```rpmbuild -ba --buildroot /tmp/brooklyn/ brooklyn.spec```
 * Install the RPM: ``` rpm -Uvh /tmp/brooklyn/RPMS/x86_64/<rpm_name>```

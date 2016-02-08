@@ -26,7 +26,7 @@ TOP_DIR="/tmp/brooklyn-buildroot"
 
 # Copy files
 /usr/bin/cp ${SCRIPT_DIR}/rpm/brooklyn.spec ${TOP_DIR}/rpmbuild/SPECS
-/usr/bin/cp ${SCRIPT_DIR}/brooklyn/brooklyn.conf ${TOP_DIR}/rpmbuild/BUILDROOT/etc/brooklyn/
+/usr/bin/cp ${SCRIPT_DIR}/conf/brooklyn.conf ${TOP_DIR}/rpmbuild/BUILDROOT/etc/brooklyn/
 /usr/bin/cp ${SCRIPT_DIR}/daemon/systemd/brooklyn.service ${TOP_DIR}/rpmbuild/BUILDROOT/etc/systemd/system/
 
 # Copy tar.gz into ${TOP_DIR}/SOURCES directory

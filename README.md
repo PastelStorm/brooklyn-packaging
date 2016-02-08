@@ -1,4 +1,13 @@
-# Testing brooklyn.service with systemd on Centos/RHEL
+# Building the RPM on Centos 7
+
+* Run ```rpm/make_rpmbuild_dir.sh```
+* Download Apache Brooklyn tar.gz file into ```/tmp/brookyn/SOURCE/``` directory
+* ```cd /tmp/brooklyn/SPECS```
+* Build the RPM: ```rpmbuild -ba --buildroot /tmp/brooklyn/ brooklyn.spec```
+* Install the RPM: ``` rpm -Uvh /tmp/brooklyn/RPMS/x86_64/<rpm_name>```
+
+
+# Testing Apache Brooklyn systemd service on Centos 7
 
 * Unpack Apache Brooklyn tarball into /opt/brooklyn directory
 * Install java: ```sudo yum install java```

@@ -34,7 +34,7 @@ PACKAGE_VERSION="1"
 
 # Copy tar.gz into ${TOP_DIR}/SOURCES directory
 /usr/bin/cp ${SCRIPT_DIR}/tarball/*.tar.gz ${TOP_DIR}/rpmbuild/SOURCES/
-/usr/bin/tar xf ${SCRIPT_DIR}/tarball/*.tar.gz -C ${TOP_DIR}/rpmbuild/BUILDROOT/${NAME}-${BROOKLYN_VERSION}-${PACKAGE_VERSION}._x86_64/opt/brooklyn/
+/usr/bin/tar xf ${SCRIPT_DIR}/tarball/*.tar.gz -C ${TOP_DIR}/rpmbuild/BUILDROOT/${NAME}-${BROOKLYN_VERSION}-${PACKAGE_VERSION}._x86_64/opt/brooklyn/ --strip-components 1
 
 # Run the build
-/usr/bin/rpm -ba ${TOP_DIR}/rpmbuild/SPECS/brooklyn.spec
+/usr/bin/rpmbuild -ba ${TOP_DIR}/rpmbuild/SPECS/brooklyn.spec

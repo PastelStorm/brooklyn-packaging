@@ -1,10 +1,8 @@
 # Define Brooklyn and package versions
-%define brooklyn_version 0.8.0
-%define package_version 1
 
 Name:           apache-brooklyn
-Version:        %brooklyn_version
-Release:        %package_version
+Version:        <set_version>
+Release:        <set_release>
 Summary:        The Apache Brooklyn program from brooklyn.apache.org
 
 Group:          Applications/Internet
@@ -48,6 +46,3 @@ Apache Brooklyn is a framework for modeling, monitoring, and managing applicatio
 /etc/brooklyn/
 /etc/systemd/system/brooklyn.service
 
-%changelog
-* Tue Feb  2 2016 Aleksandr Vasilev <aleksandr.vasilev@cloudsoftcorp.com> %brooklyn_version-%package_version
-- Initial version of the package

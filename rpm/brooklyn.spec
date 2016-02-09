@@ -10,26 +10,27 @@ Summary:        The Apache Brooklyn program from brooklyn.apache.org
 Group:          Applications/Internet
 License:        ASL 2.0
 URL:            https://brooklyn.apache.org/
-Source0:        apache-brooklyn-%brooklyn_version.tar.gz
 Requires:       java
 
 %description
 Apache Brooklyn is a framework for modeling, monitoring, and managing applications through autonomic blueprints.
 
-# Set up a group and a user to run Brooklyn
+# Set up a group and a user to run the service
 %pre
 /bin/getent group brooklyn || /sbin/groupadd -r brooklyn
 /bin/getent passwd brooklyn || /sbin/useradd -r -g brooklyn -d /opt/brooklyn -s /sbin/nologin brooklyn
 
-# Set the files ownership and start systemd daemon
+# Set the files ownership
 %post
-/bin/chown -R brooklyn:brooklyn /opt/brooklyn/
-/bin/chown -R brooklyn:brooklyn /var/run/brooklyn/
 /bin/chown -R brooklyn:brooklyn /etc/brooklyn/
+/bin/chown -R brooklyn:brooklyn /opt/brooklyn/
+/bin/chown -R brooklyn:brooklyn /var/log/brooklyn/
+
+# Reload and start systemd daemon
 /bin/systemctl daemon-reload
 /bin/systemctl start brooklyn
 
-# Stop Brooklyn service before uninstalling the package
+# Stop service before uninstalling the package
 %preun
 /bin/systemctl stop brooklyn
 
@@ -37,12 +38,15 @@ Apache Brooklyn is a framework for modeling, monitoring, and managing applicatio
 %postun
 /sbin/userdel brooklyn
 
-# The files to run Brooklyn
+# Define dirs for regular files
 %files
-/etc/brooklyn/brooklyn.conf
-/etc/systemd/system/brooklyn.service
 /opt/brooklyn/
-/var/run/brooklyn/
+/var/log/brooklyn/
+
+# Define dirs for config files
+%config
+/etc/brooklyn/
+/etc/systemd/system/brooklyn.service
 
 %changelog
 * Tue Feb  2 2016 Aleksandr Vasilev <aleksandr.vasilev@cloudsoftcorp.com> %brooklyn_version-%package_version

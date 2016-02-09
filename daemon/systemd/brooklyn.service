@@ -5,7 +5,7 @@ Documentation=https://brooklyn.apache.org/documentation/index.html
 [Service]
 Type=simple
 WorkingDirectory=/opt/brooklyn/
-Environment="JAVA_OPTS=-Dbrooklyn.location.localhost.address=127.0.0.1 -Dlogback.configurationFile=/etc/conf/logback.xml -Xms256m -Xmx1g -XX:MaxPermSize=256m"
+Environment="JAVA_OPTS=-Dbrooklyn.location.localhost.address=127.0.0.1 -Dlogback.configurationFile=/etc/brooklyn/logback.xml -Xms256m -Xmx1g -XX:MaxPermSize=256m"
 Environment="CLASSPATH=/opt/brooklyn/conf:/opt/brooklyn/lib/patch/*:/opt/brooklyn/lib/brooklyn/*:/opt/brooklyn/lib/dropins/*"
 PermissionsStartOnly=true
 ExecStartPre=/usr/bin/mkdir /var/run/brooklyn

@@ -27,7 +27,7 @@ if [ $(ls -al "${SCRIPT_DIR}/tarball" | grep apache-brooklyn*.tar.gz | wc -l) -g
     exit 1
 else
     # Set the brooklyn version
-    BROOKLYN_VERSION=$(ls ${SCRIPT_DIR}/tarball/apache-brooklyn*.tar.gz | awk -F'-' '{print $3}')
+    BROOKLYN_VERSION=$(basename $(ls ${SCRIPT_DIR}/tarball/apache-brooklyn*.tar.gz) | grep -oe "[0-9]\.[0-9]\.[0-9]")
 fi
 
 
@@ -68,11 +68,10 @@ else
 fi
 
 # Add Brooklyn version and Release version to spec file
-sed -i "s/^Version:/Version:\t${BROOKLYN_VERSION}/" "${SCRIPT_DIR}/rpm/brooklyn.spec"
-sed -i "s/^Release:/Release:\t${PACKAGE_VERSION}/" "${SCRIPT_DIR}/rpm/brooklyn.spec"
+sed -i "s|^Version:.*|Version:\t${BROOKLYN_VERSION}|" "${SCRIPT_DIR}/rpm/brooklyn.spec"
+sed -i "s|^Release:.*|Release:\t${PACKAGE_VERSION}|" "${SCRIPT_DIR}/rpm/brooklyn.spec"
 
 #TODO Grab changelog data and append to the spec file
-echo "%changelog\n- Initial version of the package" >> "${SCRIPT_DIR}/rpm/brooklyn.spec"
 
 # Copy files
 cp ${SCRIPT_DIR}/conf/brooklyn.conf ${TOP_DIR}/rpmbuild/BUILDROOT/${NAME}-${BROOKLYN_VERSION}-${PACKAGE_VERSION}.x86_64/etc/brooklyn/

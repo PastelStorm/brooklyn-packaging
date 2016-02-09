@@ -68,8 +68,8 @@ else
 fi
 
 # Add Brooklyn version and Release version to spec file
-sed -e "s/^Version:/Version:\t${BROOKLYN_VERSION}" "${SCRIPT_DIR}/rpm/brooklyn.spec"
-sed -e "s/^Release:/Release:\t${PACKAGE_VERSION}" "${SCRIPT_DIR}/rpm/brooklyn.spec"
+sed -e "s/^Version:/Version:\t${BROOKLYN_VERSION}/" "${SCRIPT_DIR}/rpm/brooklyn.spec"
+sed -e "s/^Release:/Release:\t${PACKAGE_VERSION}/" "${SCRIPT_DIR}/rpm/brooklyn.spec"
 
 #TODO Grab changelog data and append to the spec file
 echo "%changelog\n- Initial version of the package" >> "${SCRIPT_DIR}/rpm/brooklyn.spec"

@@ -1,4 +1,4 @@
-# Building Brooklyn .rpm and .deb packages for CentOS 7 and RHEL 7 with systemd support.
+# Building Brooklyn .rpm packages for CentOS 7 and RHEL 7 with systemd support.
 
 * Install ```rpm-build``` package (```rpm``` on Ubuntu)
 * Clone the repo: ```git clone https://github.com/alrick87/brooklyn-packaging.git```

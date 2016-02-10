@@ -35,6 +35,7 @@ Apache Brooklyn is a framework for modeling, monitoring, and managing applicatio
 # Delete the user
 %postun
 /sbin/userdel brooklyn
+/bin/rm -rf /var/run/brooklyn
 
 # Define dirs for regular files
 %files

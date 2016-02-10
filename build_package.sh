@@ -3,6 +3,12 @@
 set -eu
 set -o pipefail
 
+# Check OS
+if [ $(uname -s) == "Darwin" ]; then
+    echo "OS X not supported"
+    exit 1
+fi
+
 # Check args number
 if [ "$#" -ne 1 ]; then
     echo "Usage: $(basename ${0}) <package_release_version>"

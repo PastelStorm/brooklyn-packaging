@@ -1,0 +1,2 @@
+/sbin/userdel brooklyn
+/bin/rm -rf /var/run/brooklyn

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -x
 
 set -eu
 set -o pipefail
@@ -37,12 +37,6 @@ echo "%_topdir %(echo ${TOP_DIR})/rpmbuild" > ${HOME}/.rpmmacros
 # Clean ${TOP_DIR}
 rm -rf ${TOP_DIR}
 
-# Uninstall apache-brooklyn if installed
-if rpm -qa | grep apache-brooklyn; then
-    echo "Please remove the apache-brooklyn package first with \"sudo rpm -e apache-brooklyn\""
-    exit 1
-fi
-
 # Create rpmbuild directory structure
 mkdir -p\
     ${TOP_DIR}/rpmbuild/BUILD\
@@ -68,8 +62,8 @@ else
 fi
 
 # Add Brooklyn version and Release version to spec file
-sed -i "s|^Version:.*|Version:\t${BROOKLYN_VERSION}|" "${SCRIPT_DIR}/spec/brooklyn.spec"
-sed -i "s|^Release:.*|Release:\t${PACKAGE_VERSION}|" "${SCRIPT_DIR}/spec/brooklyn.spec"
+sed -i.bkp "s|^Version:.*|Version:\t${BROOKLYN_VERSION}|" "${SCRIPT_DIR}/spec/brooklyn.spec"
+sed -i.bkp "s|^Release:.*|Release:\t${PACKAGE_VERSION}|" "${SCRIPT_DIR}/spec/brooklyn.spec"
 
 #TODO Grab changelog data and append to the spec file
 
@@ -89,11 +83,11 @@ chmod 644 ${TOP_DIR}/rpmbuild/BUILDROOT/${NAME}-${BROOKLYN_VERSION}-${PACKAGE_VE
 case ${PACKAGE_TYPE} in
     # Build the rpm package
     rpm)
-        fpm -s dir -t rpm -n ${NAME} -v ${BROOKLYN_VERSION} -p "${SCRIPT_DIR}/package/" "${TOP_DIR}/rpmbuild/"
+        FPM_EDITOR="cat >generated_spec_file " fpm -e -s dir -t rpm -n ${NAME} -v ${BROOKLYN_VERSION} -p "${SCRIPT_DIR}/package/" -C "${TOP_DIR}/rpmbuild/BUILDROOT/${NAME}-${BROOKLYN_VERSION}-${PACKAGE_VERSION}.x86_64/" --before-install spec/before_install.centos --after-install spec/after_install.centos --before-remove spec/before_remove.centos --after-remove spec/after_remove.centos --license 'ASL 2.0' --rpm-os linux
         ;;
     # Build the deb package
     deb)
-        fpm -s dir -t deb -n ${NAME} -v ${BROOKLYN_VERSION} -p "${SCRIPT_DIR}/package/" "${TOP_DIR}/rpmbuild/"
+        FPM_EDITOR="cat >generated_spec_file " fpm -e -s dir -t deb -n ${NAME} -v ${BROOKLYN_VERSION} -p "${SCRIPT_DIR}/package/" "${TOP_DIR}/rpmbuild/"
         ;;
     *)
         echo "Allowed package types are: rpm, deb"

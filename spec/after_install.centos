@@ -1,0 +1,7 @@
+/bin/chown -R brooklyn:brooklyn /etc/brooklyn/
+/bin/chown -R brooklyn:brooklyn /opt/brooklyn/
+/bin/chown -R brooklyn:brooklyn /var/log/brooklyn/
+
+# Reload and start systemd daemon
+/bin/systemctl daemon-reload
+/bin/systemctl start brooklyn

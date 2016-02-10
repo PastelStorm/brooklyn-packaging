@@ -66,10 +66,6 @@ else
     exit 1
 fi
 
-# Add Brooklyn version and Release version to spec file
-sed -i "s|^Version:.*|Version:\t${BROOKLYN_VERSION}|" "${SCRIPT_DIR}/spec/brooklyn.spec"
-sed -i "s|^Release:.*|Release:\t${PACKAGE_VERSION}|" "${SCRIPT_DIR}/spec/brooklyn.spec"
-
 #TODO Grab changelog data and append to the spec file
 
 # Copy files
@@ -77,6 +73,10 @@ cp ${SCRIPT_DIR}/conf/brooklyn.conf ${TOP_DIR}/rpmbuild/BUILDROOT/${NAME}-${BROO
 cp ${SCRIPT_DIR}/conf/logback.xml ${TOP_DIR}/rpmbuild/BUILDROOT/${NAME}-${BROOKLYN_VERSION}-${PACKAGE_VERSION}.x86_64/etc/brooklyn/
 cp ${SCRIPT_DIR}/spec/brooklyn.spec ${TOP_DIR}/rpmbuild/SPECS
 cp ${SCRIPT_DIR}/daemon/systemd/brooklyn.service ${TOP_DIR}/rpmbuild/BUILDROOT/${NAME}-${BROOKLYN_VERSION}-${PACKAGE_VERSION}.x86_64/etc/systemd/system/
+
+# Add Brooklyn version and Release version to spec file
+sed -i "s|^Version:.*|Version:\t${BROOKLYN_VERSION}|" "${TOP_DIR}/rpmbuild/SPECS/brooklyn.spec"
+sed -i "s|^Release:.*|Release:\t${PACKAGE_VERSION}|" "${TOP_DIR}/rpmbuild/SPECS/brooklyn.spec"
 
 # Run the build
 rpmbuild -ba ${TOP_DIR}/rpmbuild/SPECS/brooklyn.spec

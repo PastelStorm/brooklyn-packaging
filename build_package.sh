@@ -4,15 +4,16 @@ set -eu
 set -o pipefail
 
 # Check args number
-if [ "$#" -ne 1 ]; then
-    echo "Usage: $(basename ${0}) <package_release_version>"
+if [ "$#" -ne 2 ]; then
+    echo "Usage: $(basename ${0}) <package_type> <package_release_version>"
     exit 1
 fi
 
 NAME="apache-brooklyn"
 TOP_DIR="/tmp/brooklyn-buildroot"
 
-PACKAGE_VERSION=${1}
+PACKAGE_TYPE=${1}
+PACKAGE_VERSION=${2}
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 # Check if tarball exists in tarball/ dir
@@ -29,7 +30,6 @@ else
     # Set the brooklyn version
     BROOKLYN_VERSION=$(basename $(ls ${SCRIPT_DIR}/tarball/apache-brooklyn*.tar.gz) | grep -oe "[0-9]\.[0-9]\.[0-9]")
 fi
-
 
 # Change ~/.rpmmacros topdir value
 echo "%_topdir %(echo ${TOP_DIR})/rpmbuild" > ${HOME}/.rpmmacros
@@ -68,15 +68,15 @@ else
 fi
 
 # Add Brooklyn version and Release version to spec file
-sed -i "s|^Version:.*|Version:\t${BROOKLYN_VERSION}|" "${SCRIPT_DIR}/rpm/brooklyn.spec"
-sed -i "s|^Release:.*|Release:\t${PACKAGE_VERSION}|" "${SCRIPT_DIR}/rpm/brooklyn.spec"
+sed -i "s|^Version:.*|Version:\t${BROOKLYN_VERSION}|" "${SCRIPT_DIR}/spec/brooklyn.spec"
+sed -i "s|^Release:.*|Release:\t${PACKAGE_VERSION}|" "${SCRIPT_DIR}/spec/brooklyn.spec"
 
 #TODO Grab changelog data and append to the spec file
 
 # Copy files
 cp ${SCRIPT_DIR}/conf/brooklyn.conf ${TOP_DIR}/rpmbuild/BUILDROOT/${NAME}-${BROOKLYN_VERSION}-${PACKAGE_VERSION}.x86_64/etc/brooklyn/
 cp ${SCRIPT_DIR}/conf/logback.xml ${TOP_DIR}/rpmbuild/BUILDROOT/${NAME}-${BROOKLYN_VERSION}-${PACKAGE_VERSION}.x86_64/etc/brooklyn/
-cp ${SCRIPT_DIR}/rpm/brooklyn.spec ${TOP_DIR}/rpmbuild/SPECS
+cp ${SCRIPT_DIR}/spec/brooklyn.spec ${TOP_DIR}/rpmbuild/SPECS
 cp ${SCRIPT_DIR}/daemon/systemd/brooklyn.service ${TOP_DIR}/rpmbuild/BUILDROOT/${NAME}-${BROOKLYN_VERSION}-${PACKAGE_VERSION}.x86_64/etc/systemd/system/
 
 # Ensure correct permissions on files
@@ -84,4 +84,18 @@ chmod 600 ${TOP_DIR}/rpmbuild/BUILDROOT/${NAME}-${BROOKLYN_VERSION}-${PACKAGE_VE
 chmod 644 ${TOP_DIR}/rpmbuild/BUILDROOT/${NAME}-${BROOKLYN_VERSION}-${PACKAGE_VERSION}.x86_64/etc/brooklyn/logback.xml
 
 # Run the build
-rpmbuild -ba ${TOP_DIR}/rpmbuild/SPECS/brooklyn.spec
+#rpmbuild -ba ${TOP_DIR}/rpmbuild/SPECS/brooklyn.spec
+
+case ${PACKAGE_TYPE} in
+    # Build the rpm package
+    rpm)
+        fpm -s dir -t rpm -n "apache-brooklyn-${BROOKLYN_VERSION}" -p "${SCRIPT_DIR}/package/" "${TOP_DIR}/rpmbuild/"
+        ;;
+    # Build the deb package
+    deb)
+        fpm -s dir -t deb -n "apache-brooklyn-${BROOKLYN_VERSION}" -p "${SCRIPT_DIR}/package/" "${TOP_DIR}/rpmbuild/"
+        ;;
+    *)
+        echo "Allowed package types are: rpm, deb"
+        exit 1
+esac

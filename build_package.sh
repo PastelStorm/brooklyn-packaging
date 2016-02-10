@@ -89,11 +89,11 @@ chmod 644 ${TOP_DIR}/rpmbuild/BUILDROOT/${NAME}-${BROOKLYN_VERSION}-${PACKAGE_VE
 case ${PACKAGE_TYPE} in
     # Build the rpm package
     rpm)
-        fpm -s dir -t rpm -n "apache-brooklyn-${BROOKLYN_VERSION}" -p "${SCRIPT_DIR}/package/" "${TOP_DIR}/rpmbuild/"
+        fpm -s dir -t rpm -n ${NAME} -v ${BROOKLYN_VERSION} -p "${SCRIPT_DIR}/package/" "${TOP_DIR}/rpmbuild/"
         ;;
     # Build the deb package
     deb)
-        fpm -s dir -t deb -n "apache-brooklyn-${BROOKLYN_VERSION}" -p "${SCRIPT_DIR}/package/" "${TOP_DIR}/rpmbuild/"
+        fpm -s dir -t deb -n ${NAME} -v ${BROOKLYN_VERSION} -p "${SCRIPT_DIR}/package/" "${TOP_DIR}/rpmbuild/"
         ;;
     *)
         echo "Allowed package types are: rpm, deb"

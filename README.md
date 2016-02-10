@@ -5,4 +5,4 @@
 * Change directory to brooklyn-packaging directory: ```cd brooklyn-packaging```
 * Download Apache Brooklyn tar.gz file into ```tarball/``` directory
 * Run ```./build_package.sh <package_release_version>```, for example: ``` ./build_package.sh 1```
-* The package will appear in ```packages/``` directory
+* The package will appear in ```package/``` directory

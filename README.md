@@ -1,6 +1,6 @@
 # Building Brooklyn .rpm and .deb packages for CentOS 7 and RHEL 7 with systemd support.
 
-* Install ```rpm-build``` package (available on CentOS, Ubuntu, Mac OS X)
+* Install ```rpm-build``` package (```rpm``` on Ubuntu)
 * Clone the repo: ```git clone https://github.com/alrick87/brooklyn-packaging.git```
 * Change directory to brooklyn-packaging directory: ```cd brooklyn-packaging```
 * Download Apache Brooklyn tar.gz file into ```tarball/``` directory

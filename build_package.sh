@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -x
 
 set -eu
 set -o pipefail
@@ -36,12 +36,6 @@ echo "%_topdir %(echo ${TOP_DIR})/rpmbuild" > ${HOME}/.rpmmacros
 # Clean ${TOP_DIR}
 rm -rf ${TOP_DIR}
 
-# Uninstall apache-brooklyn if installed
-if rpm -qa | grep apache-brooklyn; then
-    echo "Please remove the apache-brooklyn package first with \"sudo rpm -e apache-brooklyn\""
-    exit 1
-fi
-
 # Create rpmbuild directory structure
 mkdir -p\
     ${TOP_DIR}/rpmbuild/BUILD\
@@ -57,6 +51,7 @@ mkdir -p\
     ${TOP_DIR}/rpmbuild/BUILDROOT/${NAME}-${BROOKLYN_VERSION}-${PACKAGE_VERSION}.x86_64/etc/systemd/system\
     ${TOP_DIR}/rpmbuild/BUILDROOT/${NAME}-${BROOKLYN_VERSION}-${PACKAGE_VERSION}.x86_64/var/log/brooklyn\
     ${TOP_DIR}/rpmbuild/BUILDROOT/${NAME}-${BROOKLYN_VERSION}-${PACKAGE_VERSION}.x86_64/opt/brooklyn\
+    ${TOP_DIR}/rpmbuild/BUILDROOT/${NAME}-${BROOKLYN_VERSION}-${PACKAGE_VERSION}.x86_64/tmp/brooklyn\
 
 # Unpack tarball into BUILDROOT directory
 if [ -f ${SCRIPT_DIR}/tarball/apache-brooklyn*.tar.gz ]; then

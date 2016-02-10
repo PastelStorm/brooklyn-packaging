@@ -4,16 +4,15 @@ set -eu
 set -o pipefail
 
 # Check args number
-if [ "$#" -ne 2 ]; then
-    echo "Usage: $(basename ${0}) <package_type> <package_release_version>"
+if [ "$#" -ne 1 ]; then
+    echo "Usage: $(basename ${0}) <package_release_version>"
     exit 1
 fi
 
 NAME="apache-brooklyn"
 TOP_DIR="/tmp/brooklyn-buildroot"
 
-PACKAGE_TYPE=${1}
-PACKAGE_VERSION=${2}
+PACKAGE_VERSION=${1}
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 # Check if tarball exists in tarball/ dir
@@ -79,23 +78,8 @@ cp ${SCRIPT_DIR}/conf/logback.xml ${TOP_DIR}/rpmbuild/BUILDROOT/${NAME}-${BROOKL
 cp ${SCRIPT_DIR}/spec/brooklyn.spec ${TOP_DIR}/rpmbuild/SPECS
 cp ${SCRIPT_DIR}/daemon/systemd/brooklyn.service ${TOP_DIR}/rpmbuild/BUILDROOT/${NAME}-${BROOKLYN_VERSION}-${PACKAGE_VERSION}.x86_64/etc/systemd/system/
 
-# Ensure correct permissions on files
-chmod 600 ${TOP_DIR}/rpmbuild/BUILDROOT/${NAME}-${BROOKLYN_VERSION}-${PACKAGE_VERSION}.x86_64/etc/brooklyn/brooklyn.conf
-chmod 644 ${TOP_DIR}/rpmbuild/BUILDROOT/${NAME}-${BROOKLYN_VERSION}-${PACKAGE_VERSION}.x86_64/etc/brooklyn/logback.xml
-
 # Run the build
-#rpmbuild -ba ${TOP_DIR}/rpmbuild/SPECS/brooklyn.spec
+rpmbuild -ba ${TOP_DIR}/rpmbuild/SPECS/brooklyn.spec
 
-case ${PACKAGE_TYPE} in
-    # Build the rpm package
-    rpm)
-        fpm -s dir -t rpm -n ${NAME} -v ${BROOKLYN_VERSION} -p "${SCRIPT_DIR}/package/" "${TOP_DIR}/rpmbuild/"
-        ;;
-    # Build the deb package
-    deb)
-        fpm -s dir -t deb -n ${NAME} -v ${BROOKLYN_VERSION} -p "${SCRIPT_DIR}/package/" "${TOP_DIR}/rpmbuild/"
-        ;;
-    *)
-        echo "Allowed package types are: rpm, deb"
-        exit 1
-esac
+# Move the rpm to package dir
+mv ${TOP_DIR}/rpmbuild/RPMS/x86_64/*.rpm ${SCRIPT_DIR}/package/

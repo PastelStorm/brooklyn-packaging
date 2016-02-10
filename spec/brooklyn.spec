@@ -20,6 +20,8 @@ Apache Brooklyn is a framework for modeling, monitoring, and managing applicatio
 
 # Set the files ownership
 %post
+/bin/chmod 600 /etc/brooklyn/brooklyn.conf
+/bin/chmod 644 /etc/brooklyn/logback.xml
 /bin/chown -R brooklyn:brooklyn /etc/brooklyn/
 /bin/chown -R brooklyn:brooklyn /opt/brooklyn/
 /bin/chown -R brooklyn:brooklyn /var/log/brooklyn/

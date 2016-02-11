@@ -48,5 +48,5 @@ Apache Brooklyn is a framework for modeling, monitoring, and managing applicatio
 %config
 /etc/brooklyn/
 /etc/systemd/system/brooklyn.service
-/var/tmp/brooklyn/
+/var/lib/brooklyn/
 

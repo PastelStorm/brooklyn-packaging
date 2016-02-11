@@ -25,7 +25,7 @@ Apache Brooklyn is a framework for modeling, monitoring, and managing applicatio
 /bin/chown -R brooklyn:brooklyn /etc/brooklyn/
 /bin/chown -R brooklyn:brooklyn /opt/brooklyn/
 /bin/chown -R brooklyn:brooklyn /var/log/brooklyn/
-/bin/chown -R brooklyn:brooklyn /tmp/brooklyn/
+/bin/chown -R brooklyn:brooklyn /var/tmp/brooklyn/
 
 # Reload and start systemd daemon
 /bin/systemctl daemon-reload
@@ -48,5 +48,5 @@ Apache Brooklyn is a framework for modeling, monitoring, and managing applicatio
 %config
 /etc/brooklyn/
 /etc/systemd/system/brooklyn.service
-/tmp/brooklyn/
+/var/tmp/brooklyn/
 

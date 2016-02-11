@@ -26,10 +26,10 @@ Apache Brooklyn is a framework for modeling, monitoring, and managing applicatio
 /bin/chown -R brooklyn:brooklyn /opt/brooklyn/
 /bin/chown -R brooklyn:brooklyn /var/lib/brooklyn/
 /bin/chown -R brooklyn:brooklyn /var/log/brooklyn/
-
-# Reload and start systemd daemon
+# Enable the service and start it
+/bin/systemctl enable brooklyn.service
 /bin/systemctl daemon-reload
-/bin/systemctl start brooklyn
+/bin/systemctl start brooklyn.service
 
 # Stop service before uninstalling the package
 %preun
@@ -41,14 +41,14 @@ Apache Brooklyn is a framework for modeling, monitoring, and managing applicatio
 /bin/rm -rf /opt/brooklin
 /bin/rm -rf /var/lib/brooklin
 
-# Define dirs for regular files
+# Define regular files
 %files
 /opt/brooklyn/
 /var/log/brooklyn/
 
-# Define dirs for config files
+# Define config files
 %config
 /etc/brooklyn/
-/etc/systemd/system/brooklyn.service
+/etc/systemd/system/multi-user.target.wants/brooklyn.service
 /var/lib/brooklyn/
 

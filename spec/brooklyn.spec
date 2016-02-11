@@ -24,8 +24,8 @@ Apache Brooklyn is a framework for modeling, monitoring, and managing applicatio
 /bin/chmod 644 /etc/brooklyn/logback.xml
 /bin/chown -R brooklyn:brooklyn /etc/brooklyn/
 /bin/chown -R brooklyn:brooklyn /opt/brooklyn/
+/bin/chown -R brooklyn:brooklyn /var/lib/brooklyn/
 /bin/chown -R brooklyn:brooklyn /var/log/brooklyn/
-/bin/chown -R brooklyn:brooklyn /var/tmp/brooklyn/
 
 # Reload and start systemd daemon
 /bin/systemctl daemon-reload
@@ -38,6 +38,8 @@ Apache Brooklyn is a framework for modeling, monitoring, and managing applicatio
 # Delete the user
 %postun
 /sbin/userdel brooklyn
+/bin/rm -rf /opt/brooklin
+/bin/rm -rf /var/lib/brooklin
 
 # Define dirs for regular files
 %files

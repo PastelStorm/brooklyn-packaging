@@ -1,2 +1,3 @@
-brooklynd
-brooklynd.dSYM*
+*.tar.gz
+*.rpm
+RPM-GPG-KEY*

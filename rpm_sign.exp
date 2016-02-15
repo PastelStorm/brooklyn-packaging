@@ -1,0 +1,9 @@
+#!/usr/bin/expect -f
+
+lassign $argv package passfile
+
+set password [exec cat $passfile]
+spawn rpm --resign $package
+expect -exact "Enter pass phrase: "
+send -- "$password\r"
+expect eof

@@ -6,7 +6,7 @@ set -o pipefail
 # Check OS
 if [ $(uname -s) == "Darwin" ]; then
     echo "OS X not supported"
-    exit 1
+    exit 0
 fi
 
 # Check args number
